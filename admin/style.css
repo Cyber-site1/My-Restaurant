@@ -1,0 +1,288 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+    display: flex;
+    background: #f0f0f1;
+    color: #3c434a;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Left Sidebar */
+.wp-sidebar {
+    width: 180px;
+    background: #1d2327;
+    color: #fff;
+    height: 100vh;
+    flex-shrink: 0;
+}
+
+.wp-sidebar .logo {
+    padding: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    background: #1d2327;
+}
+
+.wp-sidebar ul {
+    list-style: none;
+    margin-top: 10px;
+}
+
+.wp-sidebar ul li a {
+    display: block;
+    padding: 12px 15px;
+    color: #f0f0f1;
+    text-decoration: none;
+    font-size: 14px;
+    position: relative;
+}
+
+.wp-sidebar ul li a:hover {
+    background: #2c3338;
+}
+
+.wp-sidebar ul li.active a {
+    background: #2271b1;
+    color: #fff;
+}
+
+.wp-sidebar ul li.active a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 4px;
+    background-color: #8c8f94;
+    border-radius: 4px;
+}
+
+/* Right Wrapper */
+.wp-main-wrapper {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Top Admin Bar */
+.wp-topbar {
+    height: 32px;
+    background: #1d2327;
+    color: #f0f0f1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
+    font-size: 13px;
+}
+
+/* Main Screen Content */
+.wp-content {
+    padding: 20px;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.wp-content h1, .wp-content h2 {
+    font-size: 23px;
+    font-weight: 400;
+    margin-bottom: 20px;
+    display: block; 
+    margin-left: 0px;
+    margin-right: 15px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid #8c8f94;
+    border-radius: 4px;
+}
+
+.wp-content h2 {
+    font-size: 18px;
+    margin-top: 40px;
+}
+
+/* Form Styles */
+.wp-form { 
+    background: #fff; 
+    border: 1px solid #c3c4c7; 
+    padding: 20px; 
+    max-width: 600px; 
+    margin-top: 15px;
+    margin-bottom: 30px; 
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 13px; }
+.form-group input, .form-group textarea { width: 100%; padding: 8px; border: 1px solid #8c8f94; border-radius: 3px; }
+.form-group textarea { resize: vertical; height: 60px; }
+.wp-btn { background: #2271b1; color: #fff; border: none; padding: 10px 18px; cursor: pointer; border-radius: 3px; font-weight: bold;}
+.wp-btn:hover { background: #135e96; }
+
+/* Table List Layout */
+.wp-table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #c3c4c7; margin-top: 15px;}
+.wp-table th, .wp-table td { padding: 12px; text-align: left; border-bottom: 1px solid #c3c4c7; vertical-align: top;}
+.wp-table th { background: #f6f7f7; }
+
+/* Product Row Elements */
+.prod-img { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; border: 1px solid #c3c4c7; }
+.old-price { text-decoration: line-through; color: #8c8f94; margin-right: 8px; font-size: 13px; }
+.new-price { font-weight: bold; color: #46b450; }
+.desc-text { font-size: 13px; color: #646970; max-width: 300px; }
+
+/* Clean Dashboard Overview Cards */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+    padding: 0 15px;
+}
+
+.card {
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    padding: 20px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+.card h3 {
+    font-size: 14px;
+    color: #646970;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.card p {
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+/* Row Action Buttons */
+.btn-edit {
+    padding: 6px 14px;
+    font-size: 13px;
+    background: #2271b1;
+}
+
+/* Modal Window Overlay Layout */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-window {
+    background: #fff;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 550px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    overflow: hidden;
+    animation: modalSlide 0.25s ease-out;
+}
+
+@keyframes modalSlide {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+    background: #f6f7f7;
+    padding: 15px 20px;
+    border-bottom: 1px solid #c3c4c7;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.modal-header h2 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.modal-close {
+    font-size: 24px;
+    cursor: pointer;
+    color: #646970;
+    font-weight: bold;
+}
+
+.modal-close:hover {
+    color: #000;
+}
+
+#editForm {
+    padding: 20px;
+    margin: 0;
+    border: none;
+    max-width: 100%;
+}
+
+.modal-actions-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.btn-save {
+    background: #135e96;
+}
+
+/* Danger / Delete Interface Component */
+.modal-delete-section {
+    background: #fcf0f1;
+    border-top: 1px solid #d64e5e;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.warning-text {
+    font-size: 12px;
+    color: #d63638;
+}
+
+.btn-delete-confirm {
+    background: #d63638;
+    padding: 8px 14px;
+    font-size: 12px;
+}
+
+.btn-delete-confirm:hover {
+    background: #b32124;
+}

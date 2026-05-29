@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1779315834,
+        "name": "Pilau",
+        "desc": "Well cooked pilau with nice aroma and test ",
+        "price": "200.00",
+        "old_price": "",
+        "image": "uploads\/1779315834_.webp"
+    },
+    {
+        "id": 1779316378,
+        "name": "Ugali",
+        "desc": "Nicely simmered",
+        "price": "200.00",
+        "old_price": "",
+        "image": "uploads\/1779316378_.webp"
+    },
+    {
+        "id": 1779316434,
+        "name": "Chapati",
+        "desc": "nicely fried and soft crunchy feel",
+        "price": "20.00",
+        "old_price": "30.00",
+        "image": "uploads\/1779316434_.jpeg"
+    }
+]

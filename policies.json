@@ -1,0 +1,18 @@
+{
+    "privacy_policy": {
+        "title": "Privacy Policy",
+        "content": "MY RESTAURANT - PRIVACY POLICY\r\nLast Updated: May 2026\r\n\r\n1. INFORMATION WE COLLECT\r\nWhen you place an order or sign up for an account, we collect your name, email address, default delivery address, and M-Pesa phone number.\r\n\r\n2. HOW WE USE YOUR INFORMATION\r\nYour information is strictly used to process your food preparation requests, communicate delivery tracking status updates, and authenticate secure Safaricom M-Pesa API checkout tokens.\r\n\r\n3. DATA SECURITY\r\nYour profile data is stored securely within isolated binary database file layers. We do not sell, trade, or share your personal profile data with external third parties."
+    },
+    "delivery_policy": {
+        "title": "Delivery Policy",
+        "content": "MY RESTAURANT - DELIVERY POLICY\r\n\r\n1. DISPATCH TIMELINES\r\nFresh kitchen preparation and packaging begins immediately after your Safaricom M-Pesa STK push payment token authentication clears. \r\n\r\n2. DELIVERY RADIUS & RATES\r\nWe deliver to all areas specified during checkout. Standard courier or rider dispatch fees are calculated based on the delivery distance from our central kitchen hub location.\r\n\r\n3. RECEIVING YOUR ORDER\r\nPlease ensure the mobile contact phone number provided during checkout remains active so our delivery rider can contact you upon arrival at your doorstep or landmark."
+    },
+    "refund_policy": {
+        "title": "Refund Policy",
+        "content": "MY RESTAURANT - REFUND & CANCELLATION POLICY\r\n\r\n1. CANCELLING AN ORDER\r\nOrders can be cancelled via your dashboard interface before the kitchen begins active meal preparation. Once preparation is initialized, orders cannot be retracted.\r\n\r\n2. ELIGIBILITY FOR REFUNDS\r\nRefunds or meal replacements are only processed if an incorrect item is delivered, or if your M-Pesa payment transaction clears but the order fails to initialize on our servers.\r\n\r\n3. REFUND TIMELINES\r\nApproved refunds are reversed directly back to the original Safaricom M-Pesa mobile phone wallet number within 24 to 48 business hours."
+    },
+    "terms": {
+        "title": "Terms & Conditions",
+        "content": "MY RESTAURANT - TERMS & CONDITIONS\r\n\r\n1. ACCEPTANCE OF TERMS\r\nBy accessing our menu catalog, creating a profile account, or authorizing an M-Pesa checkout request, you agree to follow these operations guidelines.\r\n\r\n2. PRICING & INVENTORY\r\nAll menu item costs are presented in Kenyan Shillings (KSh). We reserve the right to alter pricing matrices or temporarily restrict kitchen dish availability based on market ingredient supplies.\r\n\r\n3. USER RESPONSIBILITY\r\nYou are completely responsible for protecting your account authentication credentials and ensuring your delivery address information is accurate."
+    }
+}
