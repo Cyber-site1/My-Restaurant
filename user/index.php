@@ -35,7 +35,7 @@ if (session_status() === PHP_SESSION_NONE) {
     <section class="shop-features-section"
              style="
              background-image:
-             url('../uploads/1779530186_Chapati.webp');">
+             url('../uploads/1779315834_.webp');">
 
         <div class="features-flex-container">
 
