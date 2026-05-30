@@ -5,7 +5,7 @@ header("Content-Type: application/json");
 $stkCallbackResponse = file_get_contents('php://input');
 
 // Log raw data for immediate verification / payment tracking audits
-$logFile = "MpesaSTKResponse.txt";
+$logFile = __DIR__ . "/../MpesaSTKResponse.txt";
 $log = fopen($logFile, "a");
 fwrite($log, $stkCallbackResponse . PHP_EOL);
 fclose($log);
@@ -42,7 +42,8 @@ if ($resultCode == 0) {
 
     try {
         // FIXED DATABASE PATH: Points to the identical parent asset path used in checkout.php
-        $db = new PDO("sqlite:../database.sqlite");
+        // Forces the system to find the file relative to the script's exact folder
+        $db = new PDO("sqlite:" . __DIR__ . "/../database.sqlite");
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         // Update the order status using the unique tracking ID passed down by Safaricom
@@ -59,7 +60,8 @@ if ($resultCode == 0) {
 } else {
     try {
         // If the customer cancelled or entered the wrong pin, flag order details accordingly
-        $db = new PDO("sqlite:../database.sqlite");
+        // Forces the system to find the file relative to the script's exact folder
+        $db = new PDO("sqlite:" . __DIR__ . "/../database.sqlite");
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         $stmt = $db->prepare("UPDATE orders SET status = 'CANCELLED_BY_USER' WHERE checkout_id = :checkout_id");

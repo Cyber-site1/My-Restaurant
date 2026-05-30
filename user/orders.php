@@ -49,8 +49,8 @@ if (isset($_GET['cancel_order_id'])) {
 }
 
 // --- FETCH SYNCED ORDER DATA ---
-// Grab all active orders for this user directly from the server's orders table
-$stmt = $db->prepare("SELECT order_id, timestamp, status, items, shipping_address, payment_method, payment_phone FROM orders WHERE user_id = :user_id AND UPPER(status) != 'CANCELLED' ORDER BY timestamp DESC");
+// FIXED QUERY: Explicitly excludes CANCELLED, CANCELLED_BY_USER, and FAILED_STK_PUSH records from active visibility
+$stmt = $db->prepare("SELECT order_id, timestamp, status, items, shipping_address, payment_method, payment_phone FROM orders WHERE user_id = :user_id AND status NOT IN ('CANCELLED', 'CANCELLED_BY_USER', 'FAILED_STK_PUSH') ORDER BY timestamp DESC");
 $stmt->execute([':user_id' => $currentUserId]);
 $live_orders_raw = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -106,7 +106,7 @@ include 'header.php';
                         <div class="shop-order-card-meta-strip">
                             <div>
                                 <span class="meta-label">Order Code:</span>
-                                <strong class="meta-value order-id-code"><?php echo htmlspecialchars($order["order_id"]); ?></strong>
+                                <strong class="meta-value order-id-code">#<?php echo htmlspecialchars($order["order_id"]); ?></strong>
                             </div>
                             <div>
                                 <span class="meta-label">Date Placed:</span>
@@ -116,7 +116,7 @@ include 'header.php';
                                 <span class="shop-status-badge status-<?php echo strtolower($order["status"]); ?>">
                                     <?php echo htmlspecialchars($order["status"]); ?>
                                 </span>
-                                <a href="orders.php?cancel_order_id=<?php echo urlencode($order["order_id"]); ?>" class="shop-cancel-order-trigger btn-order-cancel-intercept">
+                                <a href="orders.php?cancel_order_id=<?php echo urlencode($order["order_id"]); ?>" class="shop-cancel-order-trigger btn-order-cancel-intercept" onclick="return confirm('Are you sure you want to cancel this order?');">
                                     Cancel Order
                                 </a>
                             </div>

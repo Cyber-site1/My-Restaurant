@@ -1,0 +1,161 @@
+--- NEW STK TRANSMISSION ---
+Array
+(
+    [requestId] => a09d-4e35-9559-b4c85f643ac818093
+    [errorCode] => 500.001.1001
+    [errorMessage] => Wrong credentials
+)
+
+--- NEW STK TRANSMISSION ---
+Array
+(
+    [requestId] => a09d-4e35-9559-b4c85f643ac820175
+    [errorCode] => 500.001.1001
+    [errorMessage] => Wrong credentials
+)
+
+--- NEW STK TRANSMISSION ---
+Array
+(
+    [requestId] => a09d-4e35-9559-b4c85f643ac821128
+    [errorCode] => 500.001.1001
+    [errorMessage] => Wrong credentials
+)
+
+--- NEW STK TRANSMISSION ---
+Array
+(
+    [requestId] => 5c90-402a-bdc0-51ad014a4dda24703
+    [errorCode] => 500.001.1001
+    [errorMessage] => Wrong credentials
+)
+
+
+--- DEBUG VALUES ---
+Timestamp Sent: 20260530135105
+Password Sent: MTc0Mzc5YmZiMjcyZWEyMzFkNDc2MTdkNGYzNWE2YjNiM2JhMmQyMDI2MDUzMDEzNTEwNQ==
+--- NEW STK TRANSMISSION ---
+Array
+(
+    [requestId] => 5c90-402a-bdc0-51ad014a4dda25703
+    [errorCode] => 500.001.1001
+    [errorMessage] => Wrong credentials
+)
+
+
+--- DEBUG VALUES ---
+Timestamp Sent: 20260530141442
+Password Sent: MTc0Mzc5YmZiMjcyYmE1YzZlMTEwMjc2ZThjOTA1Mjc1YTE1MjMyNjc3ZDRlODAzYmNkMzAyZTczMjE1NzU3NzE4NjFkNDIwMjYwNTMwMTQxNDQy
+--- NEW STK TRANSMISSION ---
+Array
+(
+    [requestId] => a09d-4e35-9559-b4c85f643ac823749
+    [errorCode] => 500.001.1001
+    [errorMessage] => Wrong credentials
+)
+
+
+--- DEBUG VALUES ---
+Timestamp Sent: 20260530142548
+Password Sent: MTc0Mzc5YmZiMjcyYmE1YzZlMTEwMjc2ZThjOTA1Mjc1YTE1MjMyNjc3ZDRlODAzYmNkMzAyZTczMjE1NzU3NzE4NjFkNDIwMjYwNTMwMTQyNTQ4
+--- NEW STK TRANSMISSION ---
+Array
+(
+    [requestId] => 5c90-402a-bdc0-51ad014a4dda26899
+    [errorCode] => 500.001.1001
+    [errorMessage] => Wrong credentials
+)
+
+
+--- DEBUG VALUES ---
+Timestamp Sent: 20260530143609
+Password Sent: MTc0Mzc5YmZiMjcyYmE1YzZlMTEwMjc2ZThjOTA1Mjc1YTE1MjMyNjc3ZDRlODAzYmNkMzAyZTczMjE1NzU3NzE4NjFkNDIwMjYwNTMwMTQzNjA5
+--- NEW STK TRANSMISSION ---
+Array
+(
+    [requestId] => a09d-4e35-9559-b4c85f643ac824361
+    [errorCode] => 400.002.02
+    [errorMessage] => Bad Request - Invalid TransactionType
+)
+
+
+--- DEBUG VALUES ---
+Timestamp Sent: 20260530143728
+Password Sent: MTc0Mzc5YmZiMjcyYmE1YzZlMTEwMjc2ZThjOTA1Mjc1YTE1MjMyNjc3ZDRlODAzYmNkMzAyZTczMjE1NzU3NzE4NjFkNDIwMjYwNTMwMTQzNzI4
+--- NEW STK TRANSMISSION ---
+Array
+(
+    [requestId] => 5c90-402a-bdc0-51ad014a4dda27734
+    [errorCode] => 500.001.1001
+    [errorMessage] => Wrong credentials
+)
+
+
+--- DEBUG VALUES ---
+Timestamp Sent: 20260530145028
+Password Sent: MTc0Mzc5YmZiMjcyYmE1YzZlMTEwMjc2ZThjOTA1Mjc1YTE1MjMyNjc3ZDRlODAzYmNkMzAyZTczMjE1NzU3NzE4NjFkNDIwMjYwNTMwMTQ1MDI4
+--- TOKEN AUTH FAILURE ---
+Raw Error Response: 
+cURL Error: 
+--- TOKEN AUTH FAILURE ---
+Raw Error Response: 
+cURL Error: 
+--- TOKEN AUTH FAILURE ---
+Raw Error Response: 
+cURL Error: 
+--- NEW STK TRANSMISSION ---
+Array
+(
+    [requestId] => 5c90-402a-bdc0-51ad014a4dda39532
+    [errorCode] => 400.002.02
+    [errorMessage] => Bad Request - Invalid PhoneNumber
+)
+
+--- NEW STK TRANSMISSION ---
+Array
+(
+    [requestId] => 5c90-402a-bdc0-51ad014a4dda40240
+    [errorCode] => 400.002.02
+    [errorMessage] => Bad Request - Invalid PhoneNumber
+)
+
+--- NEW STK TRANSMISSION ---
+Array
+(
+    [MerchantRequestID] => 5c90-402a-bdc0-51ad014a4dda41791
+    [CheckoutRequestID] => ws_CO_30052026203123526708374149
+    [ResponseCode] => 0
+    [ResponseDescription] => Success. Request accepted for processing
+    [CustomerMessage] => Success. Request accepted for processing
+)
+
+--- NEW STK TRANSMISSION ---
+Array
+(
+    [MerchantRequestID] => 5c90-402a-bdc0-51ad014a4dda42790
+    [CheckoutRequestID] => ws_CO_30052026210209438708374149
+    [ResponseCode] => 0
+    [ResponseDescription] => Success. Request accepted for processing
+    [CustomerMessage] => Success. Request accepted for processing
+)
+
+--- NEW STK TRANSMISSION ---
+Array
+(
+    [MerchantRequestID] => 5c90-402a-bdc0-51ad014a4dda45225
+    [CheckoutRequestID] => ws_CO_30052026221345081708374149
+    [ResponseCode] => 0
+    [ResponseDescription] => Success. Request accepted for processing
+    [CustomerMessage] => Success. Request accepted for processing
+)
+
+--- NEW STK TRANSMISSION ---
+Array
+(
+    [MerchantRequestID] => a09d-4e35-9559-b4c85f643ac843282
+    [CheckoutRequestID] => ws_CO_30052026222505014708374149
+    [ResponseCode] => 0
+    [ResponseDescription] => Success. Request accepted for processing
+    [CustomerMessage] => Success. Request accepted for processing
+)
+

@@ -249,10 +249,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $page === 'reviews') {
                         <div class='card'><h3>Today's Orders</h3><p style='font-size:24px; font-weight:bold; color:#2271b1;'>0</p></div>
                         <div class='card'><h3>Total Earnings</h3><p style='font-size:24px; font-weight:bold; color:#46b450;'>Ksh 0.00</p></div>
                       </div>";
+                      
             } elseif ($page == 'orders') {
-                echo "<div><h1>Live Kitchen Orders</h1></div><p>Waiting for incoming customer submissions...</p>";
+                echo "<div><h1>Live Kitchen Orders</h1></div><br>";
+                
+                try {
+                    // Connect directly to the shared SQLite database asset file
+                    $dbFile = __DIR__ . '/../database.sqlite';
+                    $adminDb = new PDO("sqlite:" . $dbFile);
+                    $adminDb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    
+                    // Fetch every single customer record sorted from newest to oldest
+                    $ordersQuery = $adminDb->query("SELECT * FROM orders ORDER BY timestamp DESC");
+                    $allOrders = $ordersQuery->fetchAll(PDO::FETCH_ASSOC);
+                    
+                    if (empty($allOrders)) {
+                        echo "<div class='card'><p>Waiting for incoming customer submissions...</p></div>";
+                    } else {
+                        // Display clean scannable management table matrix layout
+                        echo "<table class='wp-list-table' style='width:100%; border-collapse: collapse; background:#fff; border: 1px solid #ccd0d4;'>
+                                <thead>
+                                    <tr style='background:#f6f7f7; border-bottom: 1px solid #ccd0d4; text-align:left;'>
+                                        <th style='padding:12px;'>Order Code</th>
+                                        <th style='padding:12px;'>Date Placed</th>
+                                        <th style='padding:12px;'>Phone Context</th>
+                                        <th style='padding:12px;'>Status</th>
+                                        <th style='padding:12px;'>Shipping Dest.</th>
+                                        <th style='padding:12px;'>Checkout Reference ID</th>
+                                    </tr>
+                                </thead>
+                                <tbody>";
+                                
+                        foreach ($allOrders as $order) {
+                            $formattedDate = date("M d, Y \a\\t g:i a", $order['timestamp']);
+                            
+                            // Color-code different states for quick validation checks
+                            $statusColor = "#d63638"; // Failed (Tomato Red)
+                            if ($order['status'] === 'Paid' || $order['status'] === 'SUCCESS') $statusColor = "#00a32a"; // Success (Green)
+                            if ($order['status'] === 'PENDING') $statusColor = "#dba617"; // Pending (Orange)
+                            
+                            echo "<tr style='border-bottom: 1px solid #ccd0d4;'>
+                                    <td style='padding:12px; font-weight:bold;'># " . htmlspecialchars($order['order_id']) . "</td>
+                                    <td style='padding:12px; color:#646970;'>" . $formattedDate . "</td>
+                                    <td style='padding:12px; font-family:monospace;'>" . htmlspecialchars($order['payment_phone']) . "</td>
+                                    <td style='padding:12px;'><span style='color:" . $statusColor . "; font-weight:bold;'>" . htmlspecialchars($order['status']) . "</span></td>
+                                    <td style='padding:12px; font-size:13px; max-width:200px;'>" . nl2br(htmlspecialchars($order['shipping_address'])) . "</td>
+                                    <td style='padding:12px; font-family:monospace; color:#50575e;'>" . htmlspecialchars($order['checkout_id'] ?? 'N/A') . "</td>
+                                  </tr>";
+                        }
+                        
+                        echo "</tbody></table>";
+                    }
+                } catch (PDOException $e) {
+                    echo "<div class='card' style='border-left:4px solid #d63638;'><p style='color:#d63638;'><strong>Database Connection Link Lost:</strong> " . htmlspecialchars($e->getMessage()) . "</p></div>";
+                }
             } 
-            
+
             elseif ($page == 'menu') {
                 echo "<div><h1>Menu Item Management</h1></div>";
                 ?>

@@ -3,6 +3,29 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// --- SECURE LIGHTWEIGHT ENVIRONMENT VARIABLE LOADER ---
+$envFilePath = __DIR__ . '/../.env'; // Points to your secure .env file in the parent folder
+if (file_exists($envFilePath)) {
+    $lines = file($envFilePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        if (strpos(trim($line), '#') === 0) continue; // Skip comments safely
+        
+        // Ensure the line has a valid equation format before breaking it apart
+        if (strpos($line, '=') !== false) {
+            list($name, $value) = explode('=', $line, 2);
+            $name = trim($name);
+            
+            // FIXED: Strips away wrapping double or single quotes from the .env values
+            $value = trim($value);
+            $value = str_replace(["\r", "\n"], "", $value);
+            $value = trim($value, '"\''); 
+            
+            $_ENV[$name] = $value;
+            putenv("{$name}={$value}");
+        }
+    }
+}
+
 // Redirect guest accounts to login page if signed out
 if (!isset($_SESSION['user'])) {
     header('Location: login.php');
@@ -97,37 +120,51 @@ try {
             $itemsJsonText = json_encode($compiledOrderItems);
             $generatedOrderId = "ME-" . strtoupper(substr(md5(time()), 0, 8));
 
-            // Format phone number safely to standard Kenyan code format (2547XXXXXXXX or 2541XXXXXXXX)
-            $formattedPhone = preg_replace('/^\+/', '', $phoneNum); 
-            if (str_starts_with($formattedPhone, '0')) {
-                $formattedPhone = '254' . substr($formattedPhone, 1);
+            // Step 1: Get the raw form input (Change 'phone' to your exact form input name)
+            $rawPhone = $_POST['mpesa_phone'] ?? ''; 
+
+            // Step 2: Strip absolutely everything except numbers (removes spaces, +, dashes)
+            $cleanPhone = preg_replace('/[^0-9]/', '', $rawPhone); 
+
+            // // If the number starts with 0 (e.g., 0759719231), slice off the 0 and prepend 254
+            if (strpos($cleanPhone, '0') === 0) {
+                $formattedPhone = '254' . substr($cleanPhone, 1);
+            } 
+            // // If the user already typed 254759719231, keep it exactly as is
+            elseif (strpos($cleanPhone, '254') === 0) {
+                $formattedPhone = $cleanPhone;
+            } 
+            // // SAFE NEUTRAL FALLBACK: Passes the cleaned input exactly as entered by the user
+            else {
+                $formattedPhone = $cleanPhone;
+            }
+
+            if (empty($formattedPhone)) {
+                file_put_contents('stk_error_log.txt', "DEBUG: Phone field was empty. Received POST data: " . json_encode($_POST), FILE_APPEND);
             }
             // ==================================================================
-            // 🚀 SAFARICOM M-PESA DARAJA API STK PUSH CONFIGURATION ENGINE
+            // 🚀 FIXED SAFARICOM M-PESA DARAJA API STK PUSH CONFIGURATION ENGINE
             // ==================================================================
-            // Dynamically routes using 2 distinct shortcodes based on user input
             $mpesaConfig = [
                 "env"             => $_ENV['MPESA_ENV'] ?? "sandbox",
-                "consumer_key"    => $_ENV['MPESA_CONSUMER_KEY'] ?? "YOUR_CONSUMER_KEY_HERE",
-                "consumer_secret" => $_ENV['MPESA_CONSUMER_SECRET'] ?? "YOUR_CONSUMER_SECRET_HERE",
+                "consumer_key"    => $_ENV['MPESA_CONSUMER_KEY'] ?? "",
+                "consumer_secret" => $_ENV['MPESA_CONSUMER_SECRET'] ?? "",
                 "paybill_code"    => $_ENV['MPESA_PAYBILL_SHORTCODE'] ?? "174379",
-                "till_code"       => $_ENV['MPESA_TILL_SHORTCODE'] ?? "211944",
-                "passkey"         => $_ENV['MPESA_PASSKEY'] ?? "bfb272ea231d47617d4f35a6b3b3ba2d",
-                "callback_url"    => $_ENV['MPESA_CALLBACK_URL'] ?? "https://yourdomain.com"
+                "till_code"       => $_ENV['MPESA_TILL_SHORTCODE'] ?? "",
+                "passkey"         => $_ENV['MPESA_PASSKEY'] ?? "bfb272ba5c6e110276e8c905275a15232677d4e803bcd302e7321575771861d4",
+                "callback_url"    => $_ENV['MPESA_CALLBACK_URL'] ?? ""
             ];
 
-            // Set variables dynamically depending on chosen wallet path
-            if ($payMethod === 'Buy Goods Till') {
-                $chosenShortCode   = $mpesaConfig['till_code'];
-                $transactionType   = 'CustomerBuyGoodsOnline';
-                $accountReference  = 'Store Till Payment'; // Tills use store identification label
-            } else {
-                $chosenShortCode   = $mpesaConfig['paybill_code'];
-                $transactionType   = 'CustomerPayBillOnline';
-                $accountReference  = $generatedOrderId; // Paybill requires unique invoice references
-            }
+            // Safaricom Sandbox strictly requires 174379 for authentication and routing
+            $chosenShortCode   = "174379"; 
+            $transactionType   = ($payMethod === 'Buy Goods Till') ? 'CustomerBuyGoodsOnline' : 'CustomerPayBillOnline';
+            $accountReference  = ($payMethod === 'Buy Goods Till') ? 'Store Till Payment' : $generatedOrderId;
 
-            // 1. Generate URLs dynamically based on deployment environment
+            // Check if the payment method is 'Buy Goods Till', pick till_code, else default to paybill_code
+            //$chosenShortCode = ($payMethod === 'Buy Goods Till') 
+                //? $mpesaConfig['till_code'] 
+                //: $mpesaConfig['paybill_code'];
+          // FIXED: Dynamic routing directed to genuine endpoints instead of generic homepage links
             $authUrl = ($mpesaConfig['env'] === "production") 
                 ? "https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials" 
                 : "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials";
@@ -136,24 +173,52 @@ try {
                 ? "https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest" 
                 : "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest";
 
-            // 2. Fetch API Authentication Token using Authorization Credentials
+            // 1. Fetch Token with absolute SSL bypass filters fixed
             $authHeaders = ['Authorization: Basic ' . base64_encode($mpesaConfig['consumer_key'] . ':' . $mpesaConfig['consumer_secret'])];
             $ch = curl_init($authUrl);
             curl_setopt($ch, CURLOPT_HTTPHEADER, $authHeaders);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE); // Sandbox environment safeguard bypass
-            $authResponse = json_decode(curl_exec($ch), true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE); 
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE); 
+            
+            $authResponseRaw = curl_exec($ch);
+            $authResponse = json_decode($authResponseRaw, true);
             curl_close($ch);
 
             $accessToken = $authResponse['access_token'] ?? null;
 
+            // Initialize STK variables cleanly
+            $stkResult = [];
+            $responseCode = null;
+            $checkoutRequestId = null;
+
             if ($accessToken) {
-                // 3. Setup Token Timestamps and Secure Authentication Password Matrix
-                $timestamp = date('YmdHis');
-                // Use the dynamically derived chosen shortcode for the password seed
+                // Force Nairobi timezone context first
+                date_default_timezone_set('Africa/Nairobi');
+
+                // BULLETPROOF LOCAL TIME DETECTOR
+                $isLocalEnvironment = false;
+                $currentHost = $_SERVER['HTTP_HOST'] ?? '';
+
+                if (
+                    strpos($currentHost, 'localhost') !== false || 
+                    strpos($currentHost, '127.0.0.1') !== false || 
+                    strpos($currentHost, 'ngrok') !== false ||
+                    empty($currentHost)
+                ) {
+                    $isLocalEnvironment = true;
+                }
+
+                // Map the timestamp based on environment validation check
+                if ($isLocalEnvironment) {
+                    // Local / VPN time variance engine bypass
+                    $timestamp = date('YmdHis', time() + 3600); 
+                } else {
+                    // Production live cloud container deployment 
+                    $timestamp = date('YmdHis'); 
+                }
                 $stkPassword = base64_encode($chosenShortCode . $mpesaConfig['passkey'] . $timestamp);
 
-                // 4. Map API Payload Objects
                 $stkPayload = [
                     'BusinessShortCode' => $chosenShortCode,
                     'Password'          => $stkPassword,
@@ -168,27 +233,52 @@ try {
                     'TransactionDesc'   => 'Food Basket Payment'
                 ];
 
-                // 5. Fire STK Push Request to Safaricom Servers
                 $stkHeaders = [
                     'Content-Type: application/json',
                     'Authorization: Bearer ' . $accessToken
                 ];
 
+                // 2. Fire STK Push Request to Safaricom Servers
                 $ch = curl_init($stkUrl);
                 curl_setopt($ch, CURLOPT_HTTPHEADER, $stkHeaders);
                 curl_setopt($ch, CURLOPT_POST, TRUE);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($stkPayload));
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
                 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-                $stkResult = json_decode(curl_exec($ch), true);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+                
+                $stkResultRaw = curl_exec($ch);
+                $stkResult = json_decode($stkResultRaw, true);
                 curl_close($ch);
+
+                $responseCode = $stkResult['ResponseCode'] ?? null;
+                $checkoutRequestId = $stkResult['CheckoutRequestID'] ?? null;
+
+                // Log response details to file
+                file_put_contents(
+                    __DIR__ . '/stk_error_log.txt', 
+                    "--- NEW STK TRANSMISSION ---\n" . print_r($stkResult, true) . "\n", 
+                    FILE_APPEND
+                );
+            } else {
+                // If Token Generation crashes, log the explicit server configuration error trace
+                file_put_contents(
+                    __DIR__ . '/stk_error_log.txt', 
+                    "--- TOKEN AUTH FAILURE ---\nRaw Error Response: " . $authResponseRaw . "\ncURL Error: " . curl_error($ch) . "\n", 
+                    FILE_APPEND
+                );
             }
 
+            // Dynamically checks if Safaricom successfully queued the prompt
+            $orderStatus = ($responseCode == "0") ? 'PENDING' : 'FAILED_STK_PUSH';
+
             // ==================================================================
-            // 💾 SAVE TRANSACTION STATUS AND RECORD ENTRY (UPDATED TO CAPTURE ID)
+            // 💾 SAVE TRANSACTION STATUS AND RECORD ENTRY
             // ==================================================================
             $checkoutRequestId = $stkResult['CheckoutRequestID'] ?? null;
             $responseCode = $stkResult['ResponseCode'] ?? null;
+            
+            // Dynamically checks if Safaricom successfully queued the prompt
             $orderStatus = ($responseCode == "0") ? 'PENDING' : 'FAILED_STK_PUSH';
 
             $orderStmt = $db->prepare("
@@ -216,7 +306,7 @@ try {
             echo "<script>
                 document.addEventListener('DOMContentLoaded', function() {
                     // Fires up the automated asynchronous status tracker loop instantly
-                    startMpesaPaymentStatusTracker('" . htmlspecialchars($generatedOrderId) . "');
+                    beginLiveOrderStatusPolling('" . htmlspecialchars($generatedOrderId) . "');
                 });
             </script>";
         }

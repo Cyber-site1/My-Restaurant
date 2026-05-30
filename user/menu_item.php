@@ -2,6 +2,8 @@
 // Pull loop parameters from master array definitions
 $dish_id = $item['id'];
 $price = !empty($item['price']) ? (float)$item['price'] : 0.00;
+// 🚀 FIX 1: Extract the old price parameter safely if it exists
+$old_price = !empty($item['old_price']) ? (float)$item['old_price'] : null;
 $category_tag = !empty($item['category']) ? $item['category'] : 'Main Course';
 
 $image_url = '../' . $item['image'];
@@ -22,9 +24,17 @@ $is_fav = in_array((int)$dish_id, array_map('intval', $userWishlist));
     <!-- Card Header Image Element Container -->
     <div class="menu-card-image-box" style="background-image: url('<?php echo htmlspecialchars($image_url); ?>');">
         
-        <!-- Shrunk and isolated price tag pill to prevent stretch -->
-        <span class="menu-card-price-tag" style="position: absolute; bottom: 12px; left: 12px; background: rgba(51,51,51,0.85); color: #ffcc33; padding: 4px 10px; font-weight: bold; border-radius: 6px; font-size: 12px; font-family: Arial; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: auto; right: auto;">
-            KSh <?php echo number_format($price, 2); ?>
+        <!-- 🚀 FIX 2: Dynamic Conditional Price Tray to render strikethroughs -->
+        <span class="menu-card-price-tag" style="position: absolute; bottom: 12px; left: 12px; background: rgba(51,51,51,0.85); padding: 4px 10px; font-weight: bold; border-radius: 6px; font-size: 12px; font-family: Arial; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: auto; right: auto; display: flex; align-items: center; gap: 8px;">
+            <?php if ($old_price && $old_price > $price): ?>
+                <!-- Strikethrough Layout Element -->
+                <span style="text-decoration: line-through; color: #b2bec3; font-size: 11px;">
+                    KSh <?php echo number_format($old_price, 2); ?>
+                </span>
+            <?php endif; ?>
+            <span style="color: #ffcc33;">
+                KSh <?php echo number_format($price, 2); ?>
+            </span>
         </span>
         
         <!-- Floating Heart Icon -->
@@ -84,7 +94,7 @@ $is_fav = in_array((int)$dish_id, array_map('intval', $userWishlist));
                     </span>
                 </div>
                 
-                <!-- 🎯 SINGLE CLEAN CLICK TRIGGER WORD LINK -->
+                <!-- SINGLE CLEAN CLICK TRIGGER WORD LINK -->
                 <span class="review-popup-trigger-btn" data-dish-id="<?php echo (int)$item['id']; ?>" data-dish-name="<?php echo htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8'); ?>" style="color: tomato; font-size: 12px; font-weight: bold; cursor: pointer; text-decoration: underline; display: inline-block;">
                     Review
                 </span>

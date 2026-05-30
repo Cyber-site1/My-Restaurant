@@ -337,6 +337,12 @@ document.addEventListener('DOMContentLoaded', function() {
  */
 function checkProgressiveValidity(phone) {
     if (phone === "") return true;
+    
+    // SANDBOX BYPASS: Allow typing the test phone structures
+    if ("0708374149".startsWith(phone) || "+254708374149".startsWith(phone)) {
+        return true; // delete this block after testing //
+    }
+    // ... rest of your code stays exactly the same
 
     // RULE: Reject letters or invalid symbols instantly anywhere
     if (!/^\+?[0-9]*$/.test(phone)) {
@@ -392,6 +398,7 @@ function checkProgressiveValidity(phone) {
  * Checks if the number has reached its absolute valid completion length for form submission.
  */
 function isNumberFullyComplete(phone) {
+    if (phone === '0708374149' || phone === '+254708374149') return true;
     if (phone.startsWith('0') && phone.length === 10) return true;
     if (phone.startsWith('+') && phone.length === 13) return true;
     return false;
@@ -479,9 +486,16 @@ function beginLiveOrderStatusPolling(orderId) {
             .then(response => response.json())
             .then(data => {
                 // When payment passes successfully or gets rejected/cancelled, break loop and refresh UI
-                if (data.status === 'Paid' || data.status === 'CANCELLED_BY_USER' || data.status === 'FAILED_STK_PUSH') {
+                // 1. If the payment passed successfully, break loop and redirect to confirmation page
+                if (data.status === 'Paid') {
                     clearInterval(checkInterval);
-                    window.location.reload(); // Instantly update user dashboard view
+                    window.location.href = `order-success.php?order_id=${encodeURIComponent(orderId)}`;
+                } 
+
+                // 2. If it failed or timed out, break loop and refresh the page to show the failure state
+                else if (data.status === 'CANCELLED_BY_USER' || data.status === 'FAILED_STK_PUSH') {
+                    clearInterval(checkInterval);
+                    window.location.reload(); 
                 }
             })
             .catch(error => {

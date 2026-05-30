@@ -1,0 +1,97 @@
+{"Body":{"stkCallback":{"MerchantRequestID":"5c90-402a-bdc0-51ad014a4dda41791","CheckoutRequestID":"ws_CO_30052026203123526708374149","ResultCode":1037,"ResultDesc":"No response from user."}}}
+{"Body":{"stkCallback":{"MerchantRequestID":"5c90-402a-bdc0-51ad014a4dda42790","CheckoutRequestID":"ws_CO_30052026210209438708374149","ResultCode":1037,"ResultDesc":"DS timeout user cannot be reached."}}}
+{
+  "Body": {
+    "stkCallback": {
+      "MerchantRequestID": "5c90-402a-bdc0-51ad014a4dda42790",
+      "CheckoutRequestID": "ws_CO_30052026210209438708374149",
+      "ResultCode": 0,
+      "ResultDesc": "The service request is processed successfully.",
+      "CallbackMetadata": {
+        "Item": [
+          {
+            "Name": "Amount",
+            "Value": 1.00
+          },
+          {
+            "Name": "MpesaReceiptNumber",
+            "Value": "NLJ12RTX45"
+          },
+          {
+            "Name": "TransactionDate",
+            "Value": 20260530210327
+          },
+          {
+            "Name": "PhoneNumber",
+            "Value": 254708374149
+          }
+        ]
+      }
+    }
+  }
+} 
+{
+  "Body": {
+    "stkCallback": {
+      "MerchantRequestID": "5c90-402a-bdc0-51ad014a4dda42790",
+      "CheckoutRequestID": "ws_CO_30052026210209438708374149",
+      "ResultCode": 0,
+      "ResultDesc": "The service request is processed successfully.",
+      "CallbackMetadata": {
+        "Item": [
+          {
+            "Name": "Amount",
+            "Value": 1.00
+          },
+          {
+            "Name": "MpesaReceiptNumber",
+            "Value": "NLJ12RTX45"
+          },
+          {
+            "Name": "TransactionDate",
+            "Value": 20260530210327
+          },
+          {
+            "Name": "PhoneNumber",
+            "Value": 254708374149
+          }
+        ]
+      }
+    }
+  }
+} 
+{"Body":{"stkCallback":{"MerchantRequestID":"5c90-402a-bdc0-51ad014a4dda45225","CheckoutRequestID":"ws_CO_30052026221345081708374149","ResultCode":1037,"ResultDesc":"No response from user."}}}
+{
+  "Body": {
+    "stkCallback": {
+      "MerchantRequestID": "5c90-402a-bdc0-51ad014a4dda45225",
+      "CheckoutRequestID": "ws_CO_30052026221345081708374149",
+      "ResultCode": 0,
+      "ResultDesc": "The service request is processed successfully.",
+      "CallbackMetadata": {
+        "Item": [
+          {
+            "Name": "Amount",
+            "Value": 1.00
+          },
+          {
+            "Name": "MpesaReceiptNumber",
+            "Value": "NLJ12RTX45"
+          },
+          {
+            "Name": "TransactionDate",
+            "Value": 20260530210327
+          },
+          {
+            "Name": "PhoneNumber",
+            "Value": 254708374149
+          }
+        ]
+      }
+    }
+  }
+} 
+{"Body":{"stkCallback":{"MerchantRequestID":"a09d-4e35-9559-b4c85f643ac843282","CheckoutRequestID":"ws_CO_30052026222505014708374149","ResultCode":1037,"ResultDesc":"No response from user."}}}
+{"Body":{"stkCallback":{"MerchantRequestID":"a09d-4e35-9559-b4c85f643ac843282","CheckoutRequestID":"ws_CO_30052026222505014708374149","ResultCode":1037,"ResultDesc":"No response from user."}}}
+{"Body":{"stkCallback":{"MerchantRequestID":"a09d-4e35-9559-b4c85f643ac843282","CheckoutRequestID":"ws_CO_30052026222505014708374149","ResultCode":1037,"ResultDesc":"No response from user."}}}
+{"Body":{"stkCallback":{"MerchantRequestID":"a09d-4e35-9559-b4c85f643ac843282","CheckoutRequestID":"ws_CO_30052026222505014708374149","ResultCode":1037,"ResultDesc":"No response from user."}}}

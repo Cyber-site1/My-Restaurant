@@ -14,65 +14,54 @@ $dbFile = __DIR__ . '/../database.sqlite';
 try {
     $db = new PDO("sqlite:" . $dbFile);
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
-    // FIXED: The missing table verification setup query you remembered!
-    $db->exec("CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT, 
-        name TEXT, 
-        email TEXT, 
-        password TEXT, 
-        google_provider TEXT, 
-        orders TEXT
-    )");
-
 } catch (PDOException $e) {
     die("Database connectivity error: " . $e->getMessage());
 }
 
 $currentUserId = $_SESSION['user']['id'];
 
-// Fetch your data directly from the active user's database row
-$stmt = $db->prepare("SELECT orders FROM users WHERE id = :id");
-$stmt->execute([':id' => $currentUserId]);
-$userRow = $stmt->fetch(PDO::FETCH_ASSOC);
-
-if (!$userRow) {
-    header('Location: logout.php');
-    exit();
+// --- UPGRADED REAL-TIME RELATIONAL DATABASE LOADER ---
+try {
+    // Fetch all cancelled items linked to the customer directly from the orders table row registry
+    $stmt = $db->prepare("SELECT * FROM orders WHERE user_id = :uid AND (status = 'CANCELLED_BY_USER' OR status = 'CANCELLED' OR status = 'FAILED_STK_PUSH') ORDER BY timestamp DESC");
+    $stmt->execute([':uid' => $currentUserId]);
+    $rawOrders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Database transaction lookup error: " . $e->getMessage());
 }
 
-// Convert the database text back into a clean PHP array list
-$currentOrders = !empty($userRow['orders']) ? json_decode($userRow['orders'], true) : [];
-if (!is_array($currentOrders)) {
-    $currentOrders = [];
+$order_history = [];
+foreach ($rawOrders as $row) {
+    // Standardize your key descriptors map arrays to match your front-end template execution bindings
+    $order_history[] = [
+        'order_id'         => $row['order_id'],
+        'timestamp'        => (int)$row['timestamp'],
+        'status'           => 'CANCELLED', // Force evaluation flag to CANCELLED for template matching
+        'items'            => json_decode($row['items'], true) ?? [], // Re-inflate string entries back into clean arrays
+        'shipping_address' => $row['shipping_address'],
+        'payment_method'   => $row['payment_method'],
+        'payment_phone'    => $row['payment_phone']
+    ];
 }
 
-// --- SECURE SQL BULK DELETE CANCELLED ORDERS ACTION ---
+// --- SECURE SQL DELETE CANCELLED ORDERS ACTION ---
 if (isset($_GET['action']) && $_GET['action'] === 'delete_cancelled' && isset($_GET['orders'])) {
     $ordersToDelete = explode(',', $_GET['orders']);
-    $filteredOrders = [];
     $deletedCount = 0;
 
-    foreach ($currentOrders as $order) {
-        if (in_array($order['order_id'], $ordersToDelete) && strtoupper($order['status']) === 'CANCELLED') {
-            $deletedCount++;
-            continue; 
-        }
-        $filteredOrders[] = $order;
+    foreach ($ordersToDelete as $oId) {
+        // Permanently remove target row matching unique tracking indicators directly from the database table
+        $delStmt = $db->prepare("DELETE FROM orders WHERE order_id = :oid AND user_id = :uid");
+        $delStmt->execute([
+            ':oid' => trim($oId),
+            ':uid' => $currentUserId
+        ]);
+        $deletedCount += $delStmt->rowCount();
     }
-
-    // Save changes back to SQLite database
-    $updateStmt = $db->prepare("UPDATE users SET orders = :orders WHERE id = :id");
-    $updateStmt->execute([
-        ':orders' => json_encode($filteredOrders, JSON_PRETTY_PRINT),
-        ':id' => $currentUserId
-    ]);
     
     header('Location: cancelled.php?deleted=' . $deletedCount);
     exit();
 } 
-
-$order_history = $currentOrders;
 
 $productsFile = __DIR__ . '/../products.json';
 $allProducts = [];
@@ -198,5 +187,15 @@ include 'header.php';
 
     </div>
 </div>
+
+<!-- Include your separate external scripts warehouse bundle file -->
+<script src="functions.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Run the validation attachment loop loaded from functions.js
+    initializeCheckoutPhoneValidator();
+});
+</script>
 
 <?php include 'footer.php'; ?>

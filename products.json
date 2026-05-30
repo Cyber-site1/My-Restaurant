@@ -5,7 +5,8 @@
         "desc": "Well cooked pilau with nice aroma and test ",
         "price": "200.00",
         "old_price": "",
-        "image": "uploads\/1779315834_.webp"
+        "image": "uploads\/1779315834_.webp",
+        "category": "Main Course"
     },
     {
         "id": 1779316378,
@@ -13,14 +14,16 @@
         "desc": "Nicely simmered",
         "price": "200.00",
         "old_price": "",
-        "image": "uploads\/1779316378_.webp"
+        "image": "uploads\/1779316378_.webp",
+        "category": "Main Course"
     },
     {
         "id": 1779316434,
         "name": "Chapati",
         "desc": "nicely fried and soft crunchy feel",
-        "price": "20.00",
-        "old_price": "30.00",
-        "image": "uploads\/1779316434_.jpeg"
+        "price": "100.00",
+        "old_price": "150.00",
+        "image": "uploads\/1779316434_.jpeg",
+        "category": "Main Course"
     }
 ]
